@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBFC Website Identifier</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+form, button {
+    margin-top: 20px;
+}
+
+
+    </style>
+</head>
+<body>
+    <h1>NBFC Website Identifier</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" id="file-input" name="file" accept=".xlsx" required>
+        <button type="submit">Upload</button>
+    </form>
+    <button id="download-btn">Download Results</button>
+    <script>
+document.getElementById('upload-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById('file-input');
+    const formData = new FormData();
+    formData.append('filepath', fileInput.files[0]);
+
+    const response = await fetch('/upload', {
+        method: 'POST',
+        body: formData
+    });
+
+    if (response.ok) {
+        alert('File uploaded successfully');
+    } else {
+        alert('File upload failed');
+    }
+});
+
+document.getElementById('download-btn').addEventListener('click', async () => {
+    const response = await fetch('/download');
+
+    if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'nbfc_details.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    } else {
+        alert('Failed to download file');
+    }
+});
+
+
+    </script>
+</body>
+</html>

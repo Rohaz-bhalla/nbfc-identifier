@@ -1,0 +1,8 @@
+I was unable to upload node_modules
+
+to get that run in cmd prompt of your desired folder
+
+npm init -y
+
+
+make sure you have installed node js on your pc first
